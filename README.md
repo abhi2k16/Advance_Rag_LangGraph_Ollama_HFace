@@ -24,6 +24,88 @@ Use `langgraph_rag_memory.py` for the complete LangGraph agentic + knowledge + m
 python langgraph_rag_memory.py
 ```
 
+Expected terminal output at startup:
+
+```text
+============================================================
+LANGGRAPH AGENTIC + KNOWLEDGE + MEMORY RAG
+Embeddings : HuggingFace all-MiniLM-L6-v2
+LLM        : Ollama llama3.2:1b
+Memory     : LangGraph MemorySaver
+============================================================
+
+
+============================================================
+Building retrieval index...
+============================================================
+
+  PDF files discovered (<number>):
+    - <pdf-name>.pdf  [chunk=<size>, overlap=<overlap>]
+
+    - <pdf-name>.pdf: <extracted_pages>/<total_pages> pages extracted
+
+  Index summary:
+    Sources  : <number>
+    Chunks   : <number>
+
+  Indexed sources : <number>
+  Total chunks    : <number>
+============================================================
+
+
+[MemoryRAGSession] thread_id = <random-uuid>
+  mode=rewrite_rag  prompt=default  k=6  max_retries=2
+[SessionManager] Created session 'default' (thread=<same-random-uuid>)
+============================================================
+Commands: mode | prompt | session <name> | sessions | state
+          history | new | stream:<q> | batch:<q1>|<q2> | exit
+============================================================
+
+[default][rewrite_rag][default] Query:
+```
+
+Expected output after entering a normal question:
+
+```text
+  Generating answer (mode=rewrite_rag, prompt=default)...
+
+[query_node]
+  Raw query       : <your question>
+  Retrieval query : <processed query>
+  Search mode     : <mode>
+  Filters         : <filters or none>
+  Issues          : <issues or none>
+
+[router_node]
+  Route           : <route name>
+  Sources         : <sources>
+  Docs retrieved  : <number>
+
+[route_to_retriever] mode='rewrite_rag' -> local_rag_node
+
+[local_rag_node]
+  Rewritten query : <rewritten query>
+  Docs retrieved  : <number>
+
+[grader_node] Grading <number> docs (retry #0)...
+  [1] <KEEP/DROP> <filename> p.<page>
+  Relevant: <x>/<y>  (<percent>)
+  Grade: PASS
+
+[route_after_grading] -> generation_node
+
+[generation_node]
+  Prompt type : default
+  Context len : <number> chars
+  History turns: <number>
+  Answer len  : <number> chars
+
+Answer:
+<final generated answer>
+
+------------------------------------------------------------
+```
+
 Optional custom PDF folder:
 
 ```powershell
@@ -346,11 +428,10 @@ Generated/support files:
 3. Run:
 
 ```powershell
-C:\Users\abhij\anaconda3\python.exe langgraph_rag_memory.py
+python.exe langgraph_rag_memory.py
 ```
 
 4. Choose `mode` based on the question complexity.
 5. Choose `prompt` based on answer style.
 6. Ask questions and follow-ups in the same session to use memory.
 7. Use `state` to confirm memory turns are being stored.
-
