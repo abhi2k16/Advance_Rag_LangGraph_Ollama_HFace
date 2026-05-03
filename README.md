@@ -18,10 +18,30 @@ The main workflow indexes PDFs, routes questions to the right retrieval strategy
 
 ## Main Entry Points
 
-Use `langgraph_rag_memory.py` for the complete LangGraph agentic + knowledge + memory RAG CLI:
+Use `main.py` as the single executable launcher. By default it starts the complete LangGraph agentic + knowledge + memory RAG CLI:
 
 ```powershell
-python langgraph_rag_memory.py
+python.exe main.py
+```
+
+List available runnable workflows and included helper modules:
+
+```powershell
+python.exe main.py --list
+```
+
+Run a specific workflow:
+
+```powershell
+python.exe main.py memory
+C:\***\python.exe main.py advanced
+C:\***\python.exe main.py indexing
+```
+
+Optional custom PDF folder for the memory workflow:
+
+```powershell
+C:\***Users\abhij\anaconda3***\python.exe main.py memory --pdf-folder .\rag_docs
 ```
 
 Expected terminal output at startup:
@@ -106,28 +126,35 @@ Answer:
 ------------------------------------------------------------
 ```
 
-Optional custom PDF folder:
+Direct script custom PDF folder:
 
 ```powershell
-python. langgraph_rag_memory.py C:\path\to\pdf_folder
+C:\Users\abhij\anaconda3\python.exe langgraph_rag_memory.py C:\path\to\pdf_folder
+```
+
+You can still run individual scripts directly. Use `langgraph_rag_memory.py` for the complete LangGraph memory CLI:
+
+```powershell
+C:\Users\abhij\anaconda3\python.exe langgraph_rag_memory.py
 ```
 
 Use `advanced_generation_rag.py` for the standalone advanced generation CLI without LangGraph state memory:
 
 ```powershell
-python advanced_generation_rag.py
+C:\Users\abhij\anaconda3\python.exe advanced_generation_rag.py
 ```
 
 Use `IndexingDocs_for_rag.py` directly only when you want to run the older indexing and simple RAG demo pipeline:
 
 ```powershell
-python IndexingDocs_for_rag.py
+C:\Users\abhij\anaconda3\python.exe IndexingDocs_for_rag.py
 ```
 
 ## File Structure And Purpose
 
 | File | Purpose |
 | --- | --- |
+| `main.py` | Single executable launcher for the current project. Offers `memory`, `advanced`, and `indexing` workflows and lists helper modules with `--list`. |
 | `langgraph_rag_memory.py` | Main memory-enabled CLI. Creates sessions, compiles the graph with `MemorySaver`, registers the runtime router, and exposes commands such as `mode`, `prompt`, `state`, `history`, `stream:<query>`, and `batch:<q1>|<q2>`. |
 | `langgraph_rag_graph.py` | Defines `AgentState`, builds the LangGraph topology, wires nodes and conditional edges, compiles the graph, and builds the shared `MultiSourceRouter`. |
 | `langgraph_rag_nodes.py` | Contains all LangGraph node functions: query preprocessing, routing, retrieval modes, grading, generation, memory history formatting, and conditional edge routing. |
@@ -139,6 +166,13 @@ python IndexingDocs_for_rag.py
 | `advanced_rag_indexing.py` | Earlier source-aware indexing version. Kept as a reference/alternate implementation; the newer LangGraph path imports `advanced_rag_indexing_2.py`. |
 
 ## Import Relationships
+
+`main.py` launches runnable scripts with `runpy`:
+
+- `memory` or `default` runs `langgraph_rag_memory.py`.
+- `advanced` or `generation` runs `advanced_generation_rag.py`.
+- `indexing` or `index` runs `IndexingDocs_for_rag.py`.
+- helper modules are listed by `--list` but are not launched directly.
 
 `langgraph_rag_memory.py` imports:
 
@@ -258,7 +292,7 @@ All prompt types include:
 Memory is active when running:
 
 ```powershell
-C:\Users\abhij\anaconda3\python.exe langgraph_rag_memory.py
+C:\Users\abhij\anaconda3\python.exe main.py memory
 ```
 
 The graph stores conversation turns in `conversation_history`:
@@ -348,6 +382,16 @@ Compare the paper's approach with recent diffusion model applications in video g
 
 ## CLI Command Reference
 
+Available in `main.py`:
+
+```text
+memory                Run the complete LangGraph memory RAG CLI
+advanced              Run the advanced generation CLI
+indexing              Run the older indexing and simple RAG demo
+--list                Show runnable workflows and helper modules
+--pdf-folder <path>   Pass a custom PDF folder to the memory workflow
+```
+
 Available in `langgraph_rag_memory.py`:
 
 ```text
@@ -408,6 +452,12 @@ sentence-transformers/all-MiniLM-L6-v2
 
 The first run may download this model from HuggingFace if it is not already cached.
 
+On this machine, plain `python` points to the WindowsApps launcher stub and may fail. Use:
+
+```powershell
+C:\Users\abhij\anaconda3\python.exe
+```
+
 ## Data Files
 
 PDFs currently in this folder:
@@ -428,7 +478,7 @@ Generated/support files:
 3. Run:
 
 ```powershell
-python.exe langgraph_rag_memory.py
+C:\Users\abhij\anaconda3\python.exe main.py
 ```
 
 4. Choose `mode` based on the question complexity.
