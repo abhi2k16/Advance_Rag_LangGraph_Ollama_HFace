@@ -18,14 +18,14 @@ Existing modules used (read-only):
   - IndexingDocs_for_rag           →  format_docs, build_prompt
 """
 
-from __future__ import annotations
+from __future__ import annotations                        #for Python 3.10+ type hinting features (e.g. dict[str, Any])
 
 from datetime import datetime
-from typing import Any
+from typing import Any                                    #for type hinting the State dict values
 
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableConfig
+from langchain_core.output_parsers import StrOutputParser #for parsing LLM output as plain strings
+from langchain_core.prompts import ChatPromptTemplate     #for building LLM prompts from templates
+from langchain_core.runnables import RunnableConfig       #for accessing LangGraph config within nodes
 from langchain_ollama import ChatOllama
 
 # ── Existing project imports (no modifications) ────────────────────────────────
@@ -42,16 +42,17 @@ from advanced_generation_rag import (
 )
 from IndexingDocs_for_rag import build_prompt, format_docs
 
-State = dict[str, Any]
-_RUNTIME_ROUTERS: dict[str, Any] = {}
+State = dict[str, Any]                  # for type hinting the AgentState dict passed to each node
+_RUNTIME_ROUTERS: dict[str, Any] = {}   # Maps LangGraph thread_id to the live MultiSourceRouter instance for that thread
 
 
-def register_runtime_router(thread_id: str, router: Any) -> None:
+def register_runtime_router(thread_id: str, router: Any) -> None: #type hinting for the router parameter is 'Any' since we want to avoid importing MultiSourceRouter here
     """Register a live router for a LangGraph thread."""
-    _RUNTIME_ROUTERS[thread_id] = router
+    _RUNTIME_ROUTERS[thread_id] = router  # keyed by thread_id to support multiple concurrent graphs (e.g. in a web server)
+    print(f"[register_runtime_router] Registered router for thread_id={thread_id!r}")
 
 
-def _get_router(config: RunnableConfig | None) -> Any:
+def _get_router(config: RunnableConfig | None) -> Any: 
     """Return the runtime router registered for this LangGraph thread."""
     if not config:
         raise ValueError("Missing LangGraph config; cannot access runtime router.")
@@ -64,7 +65,9 @@ def _get_router(config: RunnableConfig | None) -> Any:
     return router
 
 
-def _format_conversation_history(history: list[dict], max_turns: int = 6) -> str:
+def _format_conversation_history(history: list[dict], max_turns: int = 6) -> str:  
+    # type hinting for conversation history: list of dicts with 'role' and 'content' keys 
+    # (e.g. {"role": "user", "content": "What is RAG?"})
     """Format recent chat history for the generation prompt."""
     if not history:
         return "None."
@@ -78,7 +81,9 @@ def _format_conversation_history(history: list[dict], max_turns: int = 6) -> str
     return "\n".join(lines) if lines else "None."
 
 
-def _append_conversation_turn(history: list[dict], question: str, answer: str, max_turns: int = 12) -> list[dict]:
+def _append_conversation_turn(history: list[dict], question: str, answer: str, max_turns: int = 12) -> list[dict]: 
+    # type hinting for conversation history (same as above) and question/answer as strings, 
+    # list[dict] used for the returned updated conversation history with new turns appended to it
     """Return history with the latest user/assistant turn appended."""
     updated = [dict(item) for item in history]
     updated.append({"role": "user", "content": question})
@@ -90,10 +95,12 @@ def _append_conversation_turn(history: list[dict], question: str, answer: str, m
 # SHARED LLM  (lazy singleton — created once, shared across nodes)
 # ══════════════════════════════════════════════════════════════════════════════
 
-_llm: ChatOllama | None = None
+_llm: ChatOllama | None = None  # module-level variable to hold the shared LLM instance
 
 
-def get_llm(model: str = "llama3.2:1b", temperature: float = 0) -> ChatOllama:
+def get_llm(model: str = "llama3.2:1b", temperature: float = 0) -> ChatOllama: 
+    # type hinting for the parameters of this function is str for model and float for temperature
+    # type hinting for the return value of this function is ChatOllama, which is the LLM class we're using
     """Return a cached ChatOllama instance (created on first call)."""
     global _llm
     if _llm is None:
@@ -106,7 +113,7 @@ def get_llm(model: str = "llama3.2:1b", temperature: float = 0) -> ChatOllama:
 # NODE 1 — QUERY PREPROCESSING
 # ══════════════════════════════════════════════════════════════════════════════
 
-def query_node(state: State) -> dict:
+def query_node(state: State) -> dict: #dict function return dictionary type hint
     """
     Normalize raw user input, expand abbreviations, extract routing filters,
     infer search mode, and generate query variants.
