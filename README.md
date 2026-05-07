@@ -1,10 +1,34 @@
 # Advanced RAG With LangGraph
 
+![Project Status](https://img.shields.io/badge/status-active-brightgreen)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Framework](https://img.shields.io/badge/framework-LangGraph-orange)
+
 This folder contains a local Retrieval Augmented Generation (RAG) project built with LangChain, LangGraph, HuggingFace embeddings, Ollama, and optional Tavily web search.
 
-## Project Summary
+## Description
 
 This project is a complete local RAG system for answering questions over document collections such as PDFs. It indexes documents, builds vector search indexes, routes queries to the right retrieval strategy, grades candidate results, and generates final answers with an LLM. When using the LangGraph memory-enabled flow, the system can also keep conversation history and support follow-up questions.
+
+## Table Of Contents
+
+- [Description](#description)
+- [Libraries and Their Roles](#libraries-and-their-roles)
+- [Usage](#usage)
+- [File Structure And Purpose](#file-structure-and-purpose)
+- [Import Relationships](#import-relationships)
+- [LangGraph Flow](#langgraph-flow)
+- [Retrieval Modes](#retrieval-modes)
+- [Prompt Types](#prompt-types)
+- [Conversation Memory](#conversation-memory)
+- [How To Ask Better Questions](#how-to-ask-better-questions)
+- [CLI Command Reference](#cli-command-reference)
+- [Requirements And Runtime Notes](#requirements-and-runtime-notes)
+- [Data Files](#data-files)
+- [Recommended Workflow](#recommended-workflow)
+- [Contributing](#contributing)
+- [Repository Links](#repository-links)
+- [License](#license)
 
 ## Libraries and Their Roles
 
@@ -16,7 +40,7 @@ This project is a complete local RAG system for answering questions over documen
 
 The main workflow indexes PDFs, routes questions to the right retrieval strategy, grades retrieved documents, generates answers, and can preserve conversation history across turns through LangGraph memory.
 
-## Main Entry Points
+## Usage
 
 Use `main.py` as the single executable launcher. By default it starts the complete LangGraph agentic + knowledge + memory RAG CLI:
 
@@ -485,3 +509,39 @@ C:\Users\abhij\anaconda3\python.exe main.py
 5. Choose `prompt` based on answer style.
 6. Ask questions and follow-ups in the same session to use memory.
 7. Use `state` to confirm memory turns are being stored.
+
+## Contributing
+
+Contributions should keep the project easy to run locally and should preserve the existing module boundaries:
+
+1. Open an issue or describe the change before making large workflow changes.
+2. Keep indexing, routing, graph, node, and CLI changes in their existing files unless a new module clearly reduces complexity.
+3. Add or update README usage notes when a command, dependency, environment variable, or model name changes.
+4. Test the affected workflow before submitting changes, for example:
+
+```powershell
+C:\Users\abhij\anaconda3\python.exe main.py --list
+C:\Users\abhij\anaconda3\python.exe main.py memory --pdf-folder .\rag_docs
+```
+
+5. Do not commit local cache files, generated databases, `__pycache__`, or private API keys.
+
+## Repository Links
+
+When publishing this project to GitHub or another remote host, link to files and related repositories with relative links where possible so the README works across forks:
+
+- Link to local project files like `[main.py](./main.py)`.
+- Link to folders like `[rag_docs](./rag_docs)`.
+- Use full HTTPS URLs only for external repositories, documentation, papers, or hosted resources.
+
+Example external link format:
+
+```markdown
+[LangGraph documentation](https://langchain-ai.github.io/langgraph/)
+```
+
+## License
+
+No license file is currently included in this repository. Until a license is added, all rights are reserved by the repository owner by default.
+
+To make reuse terms explicit, add a `LICENSE` file and update this section with the chosen license name, for example MIT, Apache-2.0, or GPL-3.0.
