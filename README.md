@@ -3,6 +3,8 @@
 ![Project Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Framework](https://img.shields.io/badge/framework-LangGraph-orange)
+![LLM](https://img.shields.io/badge/llm-Ollama-yellow)
+![Embedding](https://img.shields.io/badge/Embedding-HuggingFace-red)
 
 This folder contains a local Retrieval Augmented Generation (RAG) project built with LangChain, LangGraph, HuggingFace embeddings, Ollama, and optional Tavily web search.
 
