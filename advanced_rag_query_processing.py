@@ -27,6 +27,7 @@ ABBREVIATION_MAP = {
 
 @dataclass
 class ProcessedQuery:
+    """"Structured representation of a user query after preprocessing. This is what the retrieval layer will consume."""
     raw_query: str
     normalized_query: str
     retrieval_query: str
@@ -79,7 +80,8 @@ def extract_filters(query: str) -> tuple[str, dict]:
 
 
 def infer_search_mode(query: str) -> str:
-    """Classify the query into a coarse mode for downstream routing/debugging."""
+    """Classify the query into a coarse mode for downstream routing/debugging. 
+    This is a very lightweight heuristic and can be expanded with more sophisticated intent classification if needed."""
     lowered = query.lower()
     if any(word in lowered for word in ("compare", "difference", "versus", "vs")):
         return "comparison"
@@ -111,7 +113,7 @@ def build_query_variants(normalized_query: str) -> list[str]:
 
 
 def detect_query_issues(raw_query: str, normalized_query: str) -> list[str]:
-    """Flag lightweight quality issues so the app can surface them if needed."""
+    """Flag lightweight quality issues so the app can surface them if needed. This is not meant to be exhaustive, just common patterns that can cause poor retrieval."""
     issues: list[str] = []
     if len(normalized_query) < 8:
         issues.append("query_too_short")
@@ -123,7 +125,7 @@ def detect_query_issues(raw_query: str, normalized_query: str) -> list[str]:
 
 
 def process_user_query(raw_query: str) -> ProcessedQuery:
-    """Turn raw user input into a structured retrieval request."""
+    """Turn raw user input into a structured retrieval request. This is the main entry point for query preprocessing."""
     normalized = normalize_text(raw_query)
     filtered_query, filters = extract_filters(normalized)
     retrieval_query = expand_abbreviations(filtered_query)
@@ -132,6 +134,8 @@ def process_user_query(raw_query: str) -> ProcessedQuery:
     issues = detect_query_issues(raw_query, filtered_query)
 
     return ProcessedQuery(
+        # type hinting for the return value of this function is ProcessedQuery, which is the dataclass we defined above. 
+        # We are creating an instance of ProcessedQuery and populating its fields with the processed data from the raw query.
         raw_query=raw_query,
         normalized_query=filtered_query,
         retrieval_query=retrieval_query,
