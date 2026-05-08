@@ -57,9 +57,24 @@ PDF_FILES = sorted(                                                             
     str(p) for p in Path(RAG_DOCS_FOLDER).glob("*.pdf") if p.is_file()
 )
 # Print discovered PDF files for verification before processing
+# print the doc file metadata in a nice format, including number of pages and approximate character count
+print("=" * 50) 
+print("Starting to access document files and extract metadata...")
+print(f"Found {len(PDF_FILES)} PDF files in '{RAG_DOCS_FOLDER}':")
+print("=" * 50)
+def print_doc_metadata(filepath: str):
+    print(f" - {Path(filepath).name}") # Print only document name, not full path, for cleaner output
+    try:
+        with pdfplumber.open(filepath) as pdf:
+            print(f"   Pages: {len(pdf.pages)}")
+            total_chars = sum(len(page.extract_text() or '') for page in pdf.pages)
+            print(f"   Approx. Characters: {total_chars:,}")
+    except Exception as e:
+        print(f"   [Error reading PDF: {e}]")
+
 print(f"Discovered {len(PDF_FILES)} PDF files in '{RAG_DOCS_FOLDER}':")
 for pdf_file in PDF_FILES:
-    print(f" - {pdf_file}")
+    print_doc_metadata(pdf_file)
 # ─────────────────────────────────────────────
 # UTILITIES  (imported by retrieval.py and generation.py)
 # ─────────────────────────────────────────────

@@ -6,6 +6,15 @@ Responsibilities:
   - load documents by source type
   - split documents with per-source chunking settings
   - build both a global retriever and source-specific retrievers
+  - track document hashes and last-indexed timestamps in a JSON file to avoid unnecessary re-indexing
+The imported functions are used in the main retrieval.py and generation.py pipelines, 
+but the core indexing logic is all contained here in advanced_rag_indexing_2.py for better modularity and testability.
+The functions in this file are:
+  - discover_pdf_files()           # Find all PDFs in the project folder
+  - default_source_configs()       # Build one SourceConfig per PDF
+  - load_source_documents()        # Load raw documents from source files
+  - split_source_documents()       # Split documents into chunks with source-specific settings
+  - build_advanced_retrieval_index() # Main function that ties it all together
 """
 
 from __future__ import annotations # for Python 3.10 compatibility

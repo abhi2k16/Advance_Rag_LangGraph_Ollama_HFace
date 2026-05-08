@@ -9,6 +9,15 @@ Adds:
   - multi-query retrieval expansion
   - optional hybrid web + local retrieval
   - prompt preview and route debugging
+The functions in this file are:
+    - build_generation_chain: constructs the main chain with retrieval and generation logic
+    - select_retrieval_mode: CLI for picking retrieval strategy
+    - select_prompt: CLI for picking prompt template
+    - show_route_debug: utility to inspect how a query is routed and what docs are retrieved
+    - show_prompt_preview: utility to see the final rendered prompt before it goes to the LLM
+    - show_query_rewrites: utility to see how the query gets rewritten for RAG and web search
+    - generate_stream: runs the chain in streaming mode, printing tokens as they arrive
+    - generate_batch: runs the chain on a batch of queries and prints results together
 """
 
 from __future__ import annotations
