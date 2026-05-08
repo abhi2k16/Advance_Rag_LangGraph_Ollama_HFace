@@ -56,6 +56,10 @@ COLLECTION_NAME = "hf_docs"                                                     
 PDF_FILES = sorted(                                                                # Auto-discover all PDFs in rag_docs
     str(p) for p in Path(RAG_DOCS_FOLDER).glob("*.pdf") if p.is_file()
 )
+# Print discovered PDF files for verification before processing
+print(f"Discovered {len(PDF_FILES)} PDF files in '{RAG_DOCS_FOLDER}':")
+for pdf_file in PDF_FILES:
+    print(f" - {pdf_file}")
 # ─────────────────────────────────────────────
 # UTILITIES  (imported by retrieval.py and generation.py)
 # ─────────────────────────────────────────────
