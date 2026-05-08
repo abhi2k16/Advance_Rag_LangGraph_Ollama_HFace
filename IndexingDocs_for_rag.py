@@ -1,3 +1,19 @@
+"""" 
+This file is responsible for indexing PDF documents for a Retrieval-Augmented Generation (RAG) system. 
+It extracts text from PDFs, splits it into chunks, generates embeddings using a HuggingFace model, 
+and stores them in both an in-memory vector store and optionally in a PostgreSQL database using PGVector. 
+The file also tracks document changes across runs using a JSON tracker and demonstrates retrieval and 
+generation capabilities with an Ollama LLM. 
+It is designed to be imported by `retrieval.py` and `generation.py`.
+Key functionalities:
+- Document change tracking with MD5 hashes to enable incremental indexing
+- Text extraction and cleaning from PDF pages using pdfplumber
+- Splitting text into overlapping chunks with RecursiveCharacterTextSplitter
+- Generating embeddings with HuggingFace's all-MiniLM-L6-v2 model (384-dim vectors, CPU-friendly)
+- Storing embeddings in an InMemoryVectorStore for fast retrieval and optionally in PGVector for persistence
+- Building a RAG chain that retrieves relevant chunks and generates answers with an Ollama LLM
+- Interactive Q&A loop to test the full RAG pipeline with user questions about the indexed documents
+"""
 import os                          # OS-level operations: env vars, file sizes, path joins
 import re                          # Regular expressions for text cleaning
 import json                        # Read/write the JSON change tracker file
