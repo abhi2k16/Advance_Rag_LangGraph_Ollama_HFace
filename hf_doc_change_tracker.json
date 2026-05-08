@@ -2,57 +2,57 @@
   "Attention_is_All_You_Need.pdf": {
     "doc_id": "8333c54d-4298-4543-8393-802d0ac2d3f2",
     "hash": "18e1b007a1dab45b30cc861ba2dfda25",
-    "last_indexed": "2026-04-28T19:03:19.237840",
-    "num_chunks": 65,
+    "last_indexed": "2026-05-08T16:27:01.429580",
+    "num_chunks": 32,
     "previous_hash": "18e1b007a1dab45b30cc861ba2dfda25",
-    "previous_indexed": "2026-04-28T15:47:33.940335"
+    "previous_indexed": "2026-04-28T19:03:19.237840"
   },
   "MachineLearning-Lecture01.pdf": {
     "doc_id": "78de870d-ef0f-4f86-bd61-11d84f7a1c58",
     "hash": "67451841484f7423fdabf7ef24c8d648",
-    "last_indexed": "2026-04-28T19:04:16.868330",
-    "num_chunks": 138,
+    "last_indexed": "2026-05-08T16:27:01.484914",
+    "num_chunks": 57,
     "previous_hash": "67451841484f7423fdabf7ef24c8d648",
-    "previous_indexed": "2026-04-28T15:47:38.501161"
+    "previous_indexed": "2026-04-28T19:04:16.868330"
   },
   "An Introduction to Variational Autoencoders.pdf": {
     "doc_id": "c7ae2d0a-5fcc-42de-8ee7-9ac6f3110750",
     "hash": "ff4f7716fb10bffa82c9a1e26cd7ebf3",
-    "last_indexed": "2026-04-28T19:03:11.463591",
-    "num_chunks": 0,
-    "previous_hash": null,
-    "previous_indexed": null
+    "last_indexed": "2026-05-08T16:27:01.418323",
+    "num_chunks": 144,
+    "previous_hash": "ff4f7716fb10bffa82c9a1e26cd7ebf3",
+    "previous_indexed": "2026-04-28T19:03:11.463591"
   },
   "BERT_Pre-training of Deep Bidirectional Transformers for Language Understanding.pdf": {
     "doc_id": "166cdefe-f757-4f92-9cf2-2ce20135354f",
     "hash": "eb00ee1cacec4cdc5fdb41beff58f944",
-    "last_indexed": "2026-04-28T19:03:35.575562",
-    "num_chunks": 0,
-    "previous_hash": null,
-    "previous_indexed": null
+    "last_indexed": "2026-05-08T16:27:01.434951",
+    "num_chunks": 53,
+    "previous_hash": "eb00ee1cacec4cdc5fdb41beff58f944",
+    "previous_indexed": "2026-04-28T19:03:35.575562"
   },
   "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.pdf": {
     "doc_id": "34ab18be-dfb1-4d8c-aa6a-94659543c82c",
     "hash": "bb5cb052621074b4426998fcfeee100b",
-    "last_indexed": "2026-04-28T19:03:56.308625",
-    "num_chunks": 0,
-    "previous_hash": null,
-    "previous_indexed": null
+    "last_indexed": "2026-05-08T16:27:01.443258",
+    "num_chunks": 106,
+    "previous_hash": "bb5cb052621074b4426998fcfeee100b",
+    "previous_indexed": "2026-04-28T19:03:56.308625"
   },
   "Denoising Diffusion Probabilistic Models.pdf": {
     "doc_id": "89911d4f-2f1d-4d11-ae90-8ed1f1955ab4",
     "hash": "a8c5d8c82b677e4324460abc053254b4",
-    "last_indexed": "2026-04-28T19:04:06.951961",
-    "num_chunks": 0,
-    "previous_hash": null,
-    "previous_indexed": null
+    "last_indexed": "2026-05-08T16:27:01.448258",
+    "num_chunks": 53,
+    "previous_hash": "a8c5d8c82b677e4324460abc053254b4",
+    "previous_indexed": "2026-04-28T19:04:06.951961"
   },
   "Generative Adversarial Networks.pdf": {
     "doc_id": "1a2c5b69-07c0-46fa-8483-e0db5202def2",
     "hash": "33c39c78b9aa5ce8ad78dfd41df81792",
-    "last_indexed": "2026-04-28T19:04:11.475724",
-    "num_chunks": 0,
-    "previous_hash": null,
-    "previous_indexed": null
+    "last_indexed": "2026-05-08T16:27:01.482907",
+    "num_chunks": 25,
+    "previous_hash": "33c39c78b9aa5ce8ad78dfd41df81792",
+    "previous_indexed": "2026-04-28T19:04:11.475724"
   }
 }
