@@ -13,6 +13,13 @@ Key functionalities:
 - Storing embeddings in an InMemoryVectorStore for fast retrieval and optionally in PGVector for persistence
 - Building a RAG chain that retrieves relevant chunks and generates answers with an Ollama LLM
 - Interactive Q&A loop to test the full RAG pipeline with user questions about the indexed documents
+The functions in this file are:
+- build_embeddings: generates embeddings for a list of documents
+- build_vectorstore: creates and populates a vector store with the indexed documents
+- clean_text: preprocesses text by removing extra whitespace and normalizing line breaks
+- get_or_create_doc_id: generates a unique ID for a document based on its content
+- load_tracker: loads the JSON change tracker file
+- update_tracker: updates the JSON change tracker with new document information
 """
 import os                          # OS-level operations: env vars, file sizes, path joins
 import re                          # Regular expressions for text cleaning

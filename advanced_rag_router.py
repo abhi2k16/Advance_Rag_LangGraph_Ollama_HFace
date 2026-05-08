@@ -5,6 +5,16 @@ Responsibilities:
   - decide which source retrievers should be used for a query
   - retrieve from one or more source-specific indexes
   - merge and deduplicate routed results
+The main class in this file is MultiSourceRouter, which takes a user query, 
+processes it using the utilities from advanced_rag_query_processing.py, and 
+then applies routing logic to determine which indexed sources to query. 
+It uses both explicit filters extracted from the query and soft keyword matching 
+against source metadata to make informed routing decisions. The router then 
+retrieves documents from the selected sources, merges and deduplicates them, 
+and returns a structured RoutedRetrieval object that includes the processed 
+query information, the route taken, the sources used, and the retrieved documents. 
+This design allows for a flexible and resilient RAG pipeline that can adapt to 
+noisy user input and varying source characteristics.
 """
 
 from __future__ import annotations

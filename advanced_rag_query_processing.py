@@ -6,6 +6,17 @@ Responsibilities:
   - extract lightweight routing filters from the query
   - generate retrieval-friendly query variants
   - classify the query into a coarse search mode
+The functions in this file are:
+  - process_query: main function to preprocess a user query
+  - normalize_text: trim whitespace and collapse repeated punctuation/noise
+  - expand_abbreviations: expand common technical abbreviations
+  - extract_filters: parse simple routing hints from the query
+  - infer_search_mode: classify the query into a coarse search mode
+  - build_query_variants: generate retrieval-friendly variants of the query
+The function in the file, like `process_user_query`, is imported in file advanced_rag_router.py, 
+which is responsible for routing queries to the appropriate retrievers based on the processed query
+information. The router uses the structured data from ProcessedQuery to make informed decisions about 
+which sources to retrieve from and how to merge results effectively.
 """
 
 from __future__ import annotations
