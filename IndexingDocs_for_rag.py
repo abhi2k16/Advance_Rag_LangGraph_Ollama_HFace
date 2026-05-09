@@ -19,8 +19,7 @@ The functions in this file are:
 - clean_text: preprocesses text by removing extra whitespace and normalizing line breaks
 - get_or_create_doc_id: generates a unique ID for a document based on its content
 - load_tracker: loads the JSON change tracker file
-- update_tracker: updates the JSON change tracker with new document information
-"""
+- update_tracker: updates the JSON change tracker with new document information"""
 import os                          # OS-level operations: env vars, file sizes, path joins
 import re                          # Regular expressions for text cleaning
 import json                        # Read/write the JSON change tracker file
