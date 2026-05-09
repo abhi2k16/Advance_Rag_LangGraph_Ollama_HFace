@@ -18,7 +18,7 @@ import pdfplumber
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from IndexingDocs_for_rag import (
+from langchain_impl.indexing_core import (
     PDF_FILES,
     build_embeddings,
     build_vectorstore,

@@ -32,8 +32,8 @@ from uuid import uuid4
 from langgraph.checkpoint.memory import MemorySaver
 
 # ── Graph + index builder (new files only) ────────────────────────────────────
-from langgraph_rag_graph import build_router, compile_graph, AgentState
-from langgraph_rag_nodes import register_runtime_router
+from langgraph_impl.graph_builder import AgentState, build_router, compile_graph
+from langgraph_impl.graph_nodes import register_runtime_router
 
 # ══════════════════════════════════════════════════════════════════════════════
 # CONSTANTS

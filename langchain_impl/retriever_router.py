@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from advanced_rag_query_processing import ProcessedQuery, process_user_query
+from langchain_impl.query_processing import ProcessedQuery, process_user_query
 
 
 @dataclass

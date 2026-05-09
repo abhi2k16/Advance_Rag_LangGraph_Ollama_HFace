@@ -29,8 +29,7 @@ from langchain_core.runnables import RunnableConfig       #for accessing LangGra
 from langchain_ollama import ChatOllama
 
 # ── Existing project imports (no modifications) ────────────────────────────────
-from advanced_rag_query_processing import process_user_query
-from advanced_generation_rag import (
+from langchain_impl.generation_pipeline import (
     MULTIQUERY_TEMPLATE,
     RAG_FUSION_TEMPLATE,
     REWRITE_TEMPLATE,
@@ -40,7 +39,8 @@ from advanced_generation_rag import (
     parse_multi_queries,
     reciprocal_rank_fusion,
 )
-from IndexingDocs_for_rag import build_prompt, format_docs
+from langchain_impl.indexing_core import build_prompt, format_docs
+from langchain_impl.query_processing import process_user_query
 
 State = dict[str, Any]                  # for type hinting the AgentState dict passed to each node
 _RUNTIME_ROUTERS: dict[str, Any] = {}   # Maps LangGraph thread_id to the live MultiSourceRouter instance for that thread

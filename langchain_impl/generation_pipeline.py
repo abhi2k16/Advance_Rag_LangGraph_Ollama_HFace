@@ -31,8 +31,6 @@ ssl_cert_file = os.environ.get("SSL_CERT_FILE")
 if ssl_cert_file and not Path(ssl_cert_file).is_file():
     os.environ.pop("SSL_CERT_FILE", None)
 
-sys.path.insert(0, str(Path(__file__).parent))
-
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import chain
@@ -43,10 +41,9 @@ try:
 except ImportError:
     TavilySearchResults = None
 
-from IndexingDocs_for_rag import PDF_FOLDER, build_prompt, format_docs
-#from advanced_rag_indexing import build_advanced_retrieval_index
-from advanced_rag_indexing_2 import build_advanced_retrieval_index
-from advanced_rag_router import MultiSourceRouter
+from langchain_impl.indexing_core import RAG_DOCS_FOLDER, build_prompt, format_docs
+from langchain_impl.retrieval_index import build_advanced_retrieval_index
+from langchain_impl.retriever_router import MultiSourceRouter
 
 
 PROMPT_TYPES = {
@@ -438,27 +435,27 @@ def main():
     print("=" * 60 + "\n")
     
     print("[1/3] Building source-aware indexes...") # ✅ New — points to a specific uploads folder
-    import shutil
-    from pathlib import Path
+    project_pdf_folder = Path(RAG_DOCS_FOLDER)
+    
     
     PDF_FOLDER = Path(__file__).parent / "rag_docs"   # ← change folder name here if needed
     
     # Auto-create the folder if it doesn't exist yet
-    PDF_FOLDER.mkdir(exist_ok=True)
+    project_pdf_folder.mkdir(exist_ok=True)
     
     print("[1/3] Building source-aware indexes...")
-    print(f"  PDF folder : {PDF_FOLDER.resolve()}")
+    print(f"  PDF folder : {project_pdf_folder.resolve()}")
     
     # Check folder isn't empty before proceeding
-    pdf_files_found = list(PDF_FOLDER.glob("*.pdf"))
+    pdf_files_found = list(project_pdf_folder.glob("*.pdf"))
     if not pdf_files_found:
-        print(f"\n  [ERROR] No PDF files found in '{PDF_FOLDER}'")
+        print(f"\n  [ERROR] No PDF files found in '{project_pdf_folder}'")
         print(f"  Drop your PDF files into that folder and restart.\n")
         sys.exit(1)
     
     print(f"  PDFs found : {[f.name for f in pdf_files_found]}\n")
     
-    index_bundle = build_advanced_retrieval_index(k=6, pdf_folder=PDF_FOLDER)
+    index_bundle = build_advanced_retrieval_index(k=6, pdf_folder=project_pdf_folder)
     #index_bundle = build_advanced_retrieval_index(k=6)
     router = MultiSourceRouter(
         indexed_sources=index_bundle["indexed_sources"],

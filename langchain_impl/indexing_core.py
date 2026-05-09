@@ -49,8 +49,9 @@ from langchain_postgres.vectorstores import PGVector           # PostgreSQL-back
 # ─────────────────────────────────────────────
 # CONFIG  (imported by retrieval and generation modules)
 # ─────────────────────────────────────────────
-PDF_FOLDER      = str(Path(__file__).parent)                                       # Root folder = directory containing this script
-RAG_DOCS_FOLDER = r"C:\Users\abhij\Desktop\GenAIwithLLMs\LangChain_projects\rag_docs"  # Subfolder containing all PDFs
+PROJECT_ROOT    = Path(__file__).resolve().parent.parent
+PDF_FOLDER      = str(PROJECT_ROOT)                                                # Project root
+RAG_DOCS_FOLDER = PROJECT_ROOT / "rag_docs"                                        # Subfolder containing all PDFs
 TRACKER_FILE    = os.path.join(PDF_FOLDER, "hf_doc_change_tracker.json")           # JSON file that stores doc hashes and last-indexed timestamps
 RECORD_DB       = f"sqlite:///{PDF_FOLDER}/hf_record_manager.db"                  # SQLite DB used by SQLRecordManager to track which chunks are indexed
 HF_MODEL        = "sentence-transformers/all-MiniLM-L6-v2"                        # Lightweight 384-dim embedding model, runs fully on CPU

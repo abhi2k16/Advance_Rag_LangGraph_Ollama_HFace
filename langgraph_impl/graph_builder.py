@@ -28,12 +28,12 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
 
 # ── Existing project imports (no modifications) ────────────────────────────────
-from advanced_rag_indexing_2 import build_advanced_retrieval_index
-from advanced_rag_router import MultiSourceRouter
-from advanced_rag_query_processing import ProcessedQuery
+from langchain_impl.query_processing import ProcessedQuery
+from langchain_impl.retrieval_index import build_advanced_retrieval_index
+from langchain_impl.retriever_router import MultiSourceRouter
 
 # ── New node imports ───────────────────────────────────────────────────────────
-from langgraph_rag_nodes import (
+from langgraph_impl.graph_nodes import (
     generation_node,
     grader_node,
     hybrid_node,

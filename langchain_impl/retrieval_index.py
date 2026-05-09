@@ -28,7 +28,7 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Local imports (make sure to update these if you rename the file or move it to a subfolder)
-from IndexingDocs_for_rag import (
+from langchain_impl.indexing_core import (
     build_embeddings,
     build_vectorstore,
     clean_text,
@@ -38,7 +38,8 @@ from IndexingDocs_for_rag import (
 )
 
 # ── Auto-discover all PDFs in the same folder as this script ──────────────────
-_BASE_DIR = Path(__file__).parent # Root folder for PDF discovery (defaults to the folder containing this script
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_BASE_DIR = PROJECT_ROOT # Root folder for PDF discovery (defaults to the project folder)
 
 # Folders to skip so we don't accidentally index venv / cache PDFs
 _SKIP_DIRS = {"__pycache__", ".venv", "venv", "env", ".git", "node_modules"} 

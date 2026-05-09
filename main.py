@@ -25,7 +25,7 @@ from pathlib import Path
 @dataclass(frozen=True)
 class Workflow:
     key: str
-    script: str
+    module: str
     description: str
     aliases: tuple[str, ...] = ()
     accepts_pdf_folder: bool = False
@@ -34,37 +34,41 @@ class Workflow:
 WORKFLOWS = (
     Workflow(
         key="memory",
-        script="langgraph_rag_memory.py",
+        module="langgraph_impl.memory_cli",
         description="Complete LangGraph agentic + knowledge + memory RAG CLI.",
         aliases=("default", "langgraph", "langgraph-memory", "chat"),
         accepts_pdf_folder=True,
     ),
     Workflow(
         key="advanced",
-        script="advanced_generation_rag.py",
+        module="langchain_impl.generation_pipeline",
         description="Advanced RAG generation CLI with prompt, mode, route, rewrite, stream, and batch commands.",
         aliases=("generation", "advanced-generation", "rag"),
     ),
     Workflow(
         key="indexing",
-        script="IndexingDocs_for_rag.py",
+        module="langchain_impl.indexing_core",
         description="Older standalone indexing and simple RAG demo pipeline.",
         aliases=("index", "base", "demo"),
     ),
 )
 
 UTILITY_MODULES = (
-    ("langgraph_rag_graph.py", "Defines AgentState, graph topology, conditional routing, and router builder."),
-    ("langgraph_rag_nodes.py", "Contains LangGraph query, retrieval, grading, generation, and memory nodes."),
-    ("advanced_rag_indexing_2.py", "Current source-aware PDF indexing utilities used by LangGraph and advanced generation."),
-    ("advanced_rag_router.py", "Routes processed queries to source-specific or global retrievers."),
-    ("advanced_rag_query_processing.py", "Normalizes questions and extracts source/file filters."),
-    ("advanced_rag_indexing.py", "Earlier indexing implementation kept as reference."),
+    ("langgraph_impl.graph_builder", "Defines AgentState, graph topology, conditional routing, and router builder."),
+    ("langgraph_impl.graph_nodes", "Contains LangGraph query, retrieval, grading, generation, and memory nodes."),
+    ("langchain_impl.retrieval_index", "Current source-aware PDF indexing utilities used by LangGraph and advanced generation."),
+    ("langchain_impl.retriever_router", "Routes processed queries to source-specific or global retrievers."),
+    ("langchain_impl.query_processing", "Normalizes questions and extracts source/file filters."),
+    ("langchain_impl.legacy_indexing", "Earlier indexing implementation kept as reference."),
 )
 
 
 def project_dir() -> Path:
     return Path(__file__).resolve().parent
+
+
+def module_path(module: str) -> Path:
+    return project_dir() / Path(*module.split(".")).with_suffix(".py")
 
 
 def resolve_workflow(name: str) -> Workflow | None:
@@ -76,8 +80,7 @@ def resolve_workflow(name: str) -> Workflow | None:
 
 
 def available_workflows() -> list[tuple[Workflow, bool]]:
-    root = project_dir()
-    return [(workflow, (root / workflow.script).is_file()) for workflow in WORKFLOWS]
+    return [(workflow, module_path(workflow.module).is_file()) for workflow in WORKFLOWS]
 
 
 def print_workflows() -> None:
@@ -86,12 +89,11 @@ def print_workflows() -> None:
         status = "ready" if exists else "missing"
         aliases = f" | aliases: {', '.join(workflow.aliases)}" if workflow.aliases else ""
         print(f"  {index}. {workflow.key:<10} [{status}] {workflow.description}")
-        print(f"     script: {workflow.script}{aliases}")
+        print(f"     module: {workflow.module}{aliases}")
 
     print("\nIncluded helper modules:\n")
-    root = project_dir()
     for module, description in UTILITY_MODULES:
-        status = "found" if (root / module).is_file() else "missing"
+        status = "found" if module_path(module).is_file() else "missing"
         print(f"  - {module:<32} [{status}] {description}")
     print()
 
@@ -121,10 +123,10 @@ def choose_workflow() -> Workflow:
 
 
 def run_workflow(workflow: Workflow, pdf_folder: str | None = None) -> None:
-    script_path = project_dir() / workflow.script
-    if not script_path.is_file():
+    module_file = module_path(workflow.module)
+    if not module_file.is_file():
         raise FileNotFoundError(
-            f"Workflow '{workflow.key}' requires missing script: {script_path}"
+            f"Workflow '{workflow.key}' requires missing module file: {module_file}"
         )
 
     forwarded_args: list[str] = []
@@ -134,15 +136,15 @@ def run_workflow(workflow: Workflow, pdf_folder: str | None = None) -> None:
         forwarded_args.append(str(Path(pdf_folder).expanduser()))
 
     print(f"\nRunning workflow: {workflow.key}")
-    print(f"Script: {script_path}")
+    print(f"Module: {workflow.module}")
     if forwarded_args:
         print(f"Arguments: {' '.join(forwarded_args)}")
     print()
 
     old_argv = sys.argv[:]
     try:
-        sys.argv = [str(script_path), *forwarded_args]
-        runpy.run_path(str(script_path), run_name="__main__")
+        sys.argv = [workflow.module, *forwarded_args]
+        runpy.run_module(workflow.module, run_name="__main__")
     finally:
         sys.argv = old_argv
 
