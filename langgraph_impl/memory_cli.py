@@ -3,6 +3,18 @@ langgraph_rag_memory.py
 ───────────────────────
 Memory layer + interactive CLI for the LangGraph agentic RAG system.
 
+Imported Modules in memory_cli.py and Their Uses
+    MemorySaver from langgraph.checkpoint.memory:
+        Purpose: Provides persistent storage for the full AgentState per thread_id.
+        Use: Attached to the compiled graph to enable Memory RAG functionality.
+    AgentState, build_router, compile_graph from langgraph_impl.graph_builder:
+        Purpose: Define the structure of the agent's state; build the retrieval index; compile the graph with MemorySaver.
+        Use: AgentState is the input/output structure for the graph; build_router constructs the retrieval index; 
+        compile_graph compiles the graph with the MemorySaver checkpointer.
+    register_runtime_router from langgraph_impl.graph_nodes:
+        Purpose: Registers the router for the session's thread_id.
+        Use: Called in MemoryRAGSession.__init__() to enable routing by thread.
+
 Responsibilities
 ─────────────────
   1. Attach MemorySaver to the compiled graph so every thread_id gets its
