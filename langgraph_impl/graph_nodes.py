@@ -4,14 +4,24 @@ langgraph_rag_nodes.py
 Pure node functions for the LangGraph agentic RAG graph. 
 
 Imported Modules in graph_nodes.py from other modules and their Uses:
-  - query_processing.py              →  process_user_query (returns ProcessedQuery)
-  - indexing_core.py                 →  format_docs, build_prompt
-  - generation_pipeline.py           →  REWRITE_TEMPLATE, MULTIQUERY_TEMPLATE,
-                                       RAG_FUSION_TEMPLATE, WEB_REWRITE_TEMPLATE,
-                                       parse_multi_queries, reciprocal_rank_fusion,
-                                       format_web_results, build_web_search_tool
-  - indexing_core.py                 →  format_docs, build_prompt
+  - langchain_impl.query_processing.py              →  process_user_query (returns ProcessedQuery)
+  - langchain_impl.indexing_core.py                 →  format_docs, build_prompt
+  - langchain_impl.generation_pipeline.py           →  REWRITE_TEMPLATE, MULTIQUERY_TEMPLATE,
+                                                    RAG_FUSION_TEMPLATE, WEB_REWRITE_TEMPLATE,
+                                                    parse_multi_queries, reciprocal_rank_fusion,
+                                                    format_web_results, build_web_search_tool
+  - langchain_impl.indexing_core.py                 →  format_docs, build_prompt
 
+The main functionality of current nodes includes:
+  - query_node: preprocesses raw user query into structured ProcessedQuery
+  - router_node: routes the query to appropriate sources and retrieves initial docs
+  - local_rag_node: performs RAG with a single rewritten query
+  - multiquery_rag_node: performs RAG with multiple generated queries and deduplication
+  - rag_fusion_node: performs RAG with multiple queries and Reciprocal Rank Fusion
+  - web_search_node: rewrites query for web search and retrieves results from Tavily
+  - hybrid_node: combines local RAG and web search contexts
+  - grader_node: grades retrieved docs for relevance and decides whether to retry retrieval
+  - generation_node: generates the final answer from the retrieval context and question
 
 Every function here:
   - accepts the full AgentState dict
@@ -76,7 +86,7 @@ def _format_conversation_history(history: list[dict], max_turns: int = 6) -> str
     """Format recent chat history for the generation prompt."""
     if not history:
         return "None."
-    recent = history[-max_turns * 2 :]
+    recent = history[-max_turns * 2 :]  # get the last N turns (user + assistant = 2 entries per turn)
     lines = []
     for item in recent:
         role = str(item.get("role", "unknown")).capitalize()

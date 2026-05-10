@@ -1,5 +1,5 @@
 """
-langgraph_rag_graph.py
+graph_builder.py
 ──────────────────────
 Defines the AgentState TypedDict, wires all nodes into a StateGraph,
 attaches MemorySaver for per-thread conversation memory, and compiles
@@ -7,15 +7,18 @@ the graph.
 
 Three RAG modes in one graph
 ─────────────────────────────
-  Agentic RAG   →  grader_node decides to retry retrieval or proceed
-  Knowledge RAG →  rag_fusion_node / multiquery_rag_node / local_rag_node
-                   powered by the multi-source indexed knowledge base
-  Memory RAG    →  MemorySaver checkpointer with thread_id for multi-turn
+  Agentic RAG   →  grader_node decides to retry retrieval or proceed to generation
+  Knowledge RAG →  rag_fusion_node / multiquery_rag_node / local_rag_node 
+                   powered by the multi-source indexed knowledge base built at startup
+  Memory RAG    →  MemorySaver checkpointer with thread_id for multi-turn conversation memory, 
+                    accessible in retrieval nodes for context-aware retrieval
 
 Existing files imported (zero modifications):
-  advanced_rag_indexing_2     →  build_advanced_retrieval_index()
-  advanced_rag_router         →  MultiSourceRouter
-  langgraph_rag_nodes         →  all node functions + conditional edges
+    - graph_nodes.py                        →  All node functions (query_node, router_node, etc.)
+    - langchain_impl/retrieval_index.py     →  build_advanced_retrieval_index()
+    - langchain_impl/retriever_router.py    →  MultiSourceRouter
+    - langchain_impl.query_processing.py    →  ProcessedQuery
+    - langchain_impl.indexing_core.py       →  format_docs, build_prompt
 """
 
 from __future__ import annotations
