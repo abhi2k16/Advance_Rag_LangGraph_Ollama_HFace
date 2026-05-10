@@ -10,6 +10,30 @@ Its main goals are:
 --Splitting documents into chunks with customizable settings per source.
 --Building vector stores and retrievers for both global search and source-specific queries.
 
+Imported Modules from indexing_core.py and Their Uses in legacy_indexing.py
+    PDF_FILES (list of PDF paths):
+        Purpose: Auto-discovered PDF files from RAG_DOCS_FOLDER.
+        Use: Iterated in default_source_configs() to create SourceConfig for each PDF with dynamic chunk sizes. 
+    build_embeddings (→ HuggingFaceEmbeddings):
+        Purpose: Initializes CPU-based HuggingFace embedding model for normalized vectors.
+        Use: Called in build_advanced_retrieval_index() to get embeddings for vector stores.
+    build_vectorstore (→ InMemoryVectorStore):
+        Purpose: Creates empty in-memory vector store.
+        Use: Called for global and per-source vector stores in build_advanced_retrieval_index().
+    clean_text (str → str):
+        Purpose: Removes garbled chars, normalizes whitespace.
+        Use: Preprocesses text in load_source_documents() for PDFs and text files.
+    get_or_create_doc_id (str, dict → str):
+        Purpose: Returns existing or new UUID doc_id from tracker.
+        Use: Assigns doc_id in load_source_documents() for metadata consistency.
+    load_tracker (→ dict):
+        Purpose: Loads JSON tracker file or returns empty dict.
+        Use: Loads tracker at start of build_advanced_retrieval_index() for change tracking.
+    update_tracker (str, dict, int, str → None):
+        Purpose: Updates tracker with hash, timestamp, chunk count, and saves to disk.
+        Use: Updates tracker per source in build_advanced_retrieval_index() after indexing.
+
+
 Main Components
 Imports: Relies on LangChain components (e.g., Document, RecursiveCharacterTextSplitter), pdfplumber for PDF processing, 
 and local modules from indexing_core (e.g., for embeddings, vector stores, and tracking).
