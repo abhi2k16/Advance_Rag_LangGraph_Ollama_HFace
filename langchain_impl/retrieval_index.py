@@ -20,6 +20,7 @@ The functions in this file are:
 from __future__ import annotations # for Python 3.10 compatibility
 
 import json
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 import sys
@@ -34,6 +35,7 @@ if __package__ in {None, ""}:
 
 # Local imports (make sure to update these if you rename the file or move it to a subfolder)
 from langchain_impl.indexing_core import (
+    RAG_DOCS_FOLDER,
     build_embeddings,
     build_vectorstore,
     clean_text,
@@ -45,7 +47,37 @@ from langchain_impl.indexing_core import (
 
 # ── Auto-discover all PDFs in the same folder as this script ──────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-_BASE_DIR = PROJECT_ROOT # Root folder for PDF discovery (defaults to the project folder)
+
+
+def _candidate_pdf_roots() -> list[Path]:
+    """Return candidate PDF roots in priority order, without duplicates."""
+    candidates: list[Path] = []
+
+    env_pdf_folder = os.environ.get("PDF_FOLDER")
+    if env_pdf_folder:
+        candidates.append(Path(env_pdf_folder).expanduser())
+
+    if RAG_DOCS_FOLDER:
+        candidates.append(Path(RAG_DOCS_FOLDER).expanduser())
+
+    candidates.append(PROJECT_ROOT / "rag_docs")
+    if PROJECT_ROOT.parent != PROJECT_ROOT:
+        candidates.append(PROJECT_ROOT.parent / "rag_docs")
+
+    candidates.append(PROJECT_ROOT)
+
+    unique_candidates: list[Path] = []
+    seen: set[Path] = set()
+    for candidate in candidates:
+        resolved = candidate.resolve(strict=False)
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        unique_candidates.append(resolved)
+    return unique_candidates
+
+
+_BASE_DIR = _candidate_pdf_roots()[0]  # Preferred root for PDF discovery
 
 # Folders to skip so we don't accidentally index venv / cache PDFs
 _SKIP_DIRS = {"__pycache__", ".venv", "venv", "env", ".git", "node_modules"} 
@@ -121,9 +153,13 @@ def default_source_configs(pdf_files: list[Path] | None = None) -> list[SourceCo
         pdf_files = PDF_FILES
 
     if not pdf_files:
+        searched_roots = "\n".join(
+            f"  - {candidate}" for candidate in _candidate_pdf_roots()
+        )
         raise FileNotFoundError(
-            f"No PDF files found under '{_BASE_DIR}'.\n"
-            "Make sure your PDF files are in the same folder as advanced_rag_indexing.py."
+            "No PDF files found.\n"
+            f"Searched these locations:\n{searched_roots}\n"
+            "Pass `--pdf-folder`, set `PDF_FOLDER`, or place PDFs in `rag_docs`."
         )
 
     configs: list[SourceConfig] = []
