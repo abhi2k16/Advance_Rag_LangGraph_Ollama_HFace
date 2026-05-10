@@ -1,5 +1,5 @@
 """
-langgraph_rag_nodes.py
+graph_nodes.py
 ──────────────────────
 Pure node functions for the LangGraph agentic RAG graph. 
 
