@@ -3,7 +3,7 @@ langgraph_rag_memory.py
 ───────────────────────
 Memory layer + interactive CLI for the LangGraph agentic RAG system.
 
-Imported Modules in memory_cli.py and Their Uses
+Imported Modules in memory_cli.py and their Uses:
     MemorySaver from langgraph.checkpoint.memory:
         Purpose: Provides persistent storage for the full AgentState per thread_id.
         Use: Attached to the compiled graph to enable Memory RAG functionality.

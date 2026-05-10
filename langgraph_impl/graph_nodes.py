@@ -1,21 +1,26 @@
 """
 langgraph_rag_nodes.py
 ──────────────────────
-Pure node functions for the LangGraph agentic RAG graph.
+Pure node functions for the LangGraph agentic RAG graph. 
+
+Imported Modules in graph_nodes.py from other modules and their Uses:
+  - query_processing.py              →  process_user_query (returns ProcessedQuery)
+  - indexing_core.py                 →  format_docs, build_prompt
+  - generation_pipeline.py           →  REWRITE_TEMPLATE, MULTIQUERY_TEMPLATE,
+                                       RAG_FUSION_TEMPLATE, WEB_REWRITE_TEMPLATE,
+                                       parse_multi_queries, reciprocal_rank_fusion,
+                                       format_web_results, build_web_search_tool
+  - indexing_core.py                 →  format_docs, build_prompt
+
 
 Every function here:
   - accepts the full AgentState dict
   - returns a *partial* dict that LangGraph merges back into state
   - imports only from existing project modules (no edits to those files)
-
-Existing modules used (read-only):
-  - advanced_rag_query_processing  →  process_user_query, ProcessedQuery
-  - advanced_rag_router            →  MultiSourceRouter, RoutedRetrieval
-  - advanced_generation_rag        →  REWRITE_TEMPLATE, MULTIQUERY_TEMPLATE,
-                                      RAG_FUSION_TEMPLATE, WEB_REWRITE_TEMPLATE,
-                                      parse_multi_queries, reciprocal_rank_fusion,
-                                      format_web_results, build_web_search_tool
-  - IndexingDocs_for_rag           →  format_docs, build_prompt
+This file also includes the shared get_llm() function and the runtime router registry functions that 
+allow nodes to access the live MultiSourceRouter instance without a direct import (to avoid circular dependencies). 
+The router instance is registered at runtime by the graph execution code and keyed by thread_id to support 
+multiple concurrent graphs (e.g. in a web server).
 """
 
 from __future__ import annotations                        #for Python 3.10+ type hinting features (e.g. dict[str, Any])
