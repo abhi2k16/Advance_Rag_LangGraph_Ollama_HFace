@@ -29,6 +29,9 @@ from pathlib import Path
 from typing import Iterator, Optional
 from uuid import uuid4
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from langgraph.checkpoint.memory import MemorySaver
 
 # ── Graph + index builder (new files only) ────────────────────────────────────

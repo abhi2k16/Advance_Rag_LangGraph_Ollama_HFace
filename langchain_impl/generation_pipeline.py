@@ -27,6 +27,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 ssl_cert_file = os.environ.get("SSL_CERT_FILE")
 if ssl_cert_file and not Path(ssl_cert_file).is_file():
     os.environ.pop("SSL_CERT_FILE", None)

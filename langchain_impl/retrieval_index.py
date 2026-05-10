@@ -22,10 +22,15 @@ from __future__ import annotations # for Python 3.10 compatibility
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+import sys
 
 import pdfplumber
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# Ensure the parent folder is in the path for local imports, regardless of how this module is run
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # Local imports (make sure to update these if you rename the file or move it to a subfolder)
 from langchain_impl.indexing_core import (
@@ -36,6 +41,7 @@ from langchain_impl.indexing_core import (
     load_tracker,
     update_tracker,
 )
+
 
 # ── Auto-discover all PDFs in the same folder as this script ──────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent

@@ -21,6 +21,7 @@ The functions in this file are:
 - load_tracker: loads the JSON change tracker file
 - update_tracker: updates the JSON change tracker with new document information"""
 import os                          # OS-level operations: env vars, file sizes, path joins
+import sys
 import re                          # Regular expressions for text cleaning
 import json                        # Read/write the JSON change tracker file
 import hashlib                     # MD5 hashing to detect file content changes
@@ -28,6 +29,9 @@ import uuid                        # Generate unique stable document IDs
 from pathlib import Path           # Cross-platform file path handling
 from datetime import datetime      # ISO timestamps for the tracker
 from collections import Counter    # Count chunk distribution per document
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # Remove SSL_CERT_FILE if it points to a missing file — prevents httpx/Ollama startup errors
 ssl_cert_file = os.environ.get("SSL_CERT_FILE")
@@ -49,9 +53,12 @@ from langchain_postgres.vectorstores import PGVector           # PostgreSQL-back
 # ─────────────────────────────────────────────
 # CONFIG  (imported by retrieval and generation modules)
 # ─────────────────────────────────────────────
-PROJECT_ROOT    = Path(__file__).resolve().parent.parent
-PDF_FOLDER      = str(PROJECT_ROOT)                                                # Project root
-RAG_DOCS_FOLDER = PROJECT_ROOT / "rag_docs"                                        # Subfolder containing all PDFs
+# C:\Users\abhij\Desktop\GenAIwithLLMs\LangChain_projects\rag_docs this is the path where the pdf files are stored. 
+# The code will automatically discover all pdf files in this folder and index them.
+file_folder = r"C:\Users\abhij\Desktop\GenAIwithLLMs\LangChain_projects\rag_docs"  # RAG_DOCS_FOLDER is the subfolder where all PDFs are stored.
+PROJECT_ROOT    = Path(__file__).resolve().parent.parent  # Root directory of the project (one level up from this file)
+PDF_FOLDER      = os.environ.get("PDF_FOLDER", str(PROJECT_ROOT))  # Allow override via env var, default to project root
+RAG_DOCS_FOLDER = file_folder                                       # Subfolder containing all PDFs
 TRACKER_FILE    = os.path.join(PDF_FOLDER, "hf_doc_change_tracker.json")           # JSON file that stores doc hashes and last-indexed timestamps
 RECORD_DB       = f"sqlite:///{PDF_FOLDER}/hf_record_manager.db"                  # SQLite DB used by SQLRecordManager to track which chunks are indexed
 HF_MODEL        = "sentence-transformers/all-MiniLM-L6-v2"                        # Lightweight 384-dim embedding model, runs fully on CPU
