@@ -1,11 +1,29 @@
 """
-Source-aware indexing utilities for an advanced RAG pipeline.
+The current file is legacy_indexing.py located in the langchain_impl directory of your workspace. 
+It's a Python module focused on source-aware indexing utilities for an advanced Retrieval-Augmented Generation (RAG) pipeline using LangChain.
 
-Responsibilities:
-  - define multiple local data sources
-  - load documents by source type
-  - split documents with per-source chunking settings
-  - build both a global retriever and source-specific retrievers
+Key Purpose and Responsibilities
+This file handles the indexing of documents from multiple local data sources, enabling both global and source-specific retrieval. 
+Its main goals are:
+--Defining and configuring multiple data sources (e.g., PDFs, text files).
+--Loading documents based on their source type (PDF, TXT, MD, JSON).
+--Splitting documents into chunks with customizable settings per source.
+--Building vector stores and retrievers for both global search and source-specific queries.
+
+Main Components
+Imports: Relies on LangChain components (e.g., Document, RecursiveCharacterTextSplitter), pdfplumber for PDF processing, 
+and local modules from indexing_core (e.g., for embeddings, vector stores, and tracking).
+
+Data Classes:
+SourceConfig: Defines a data source with ID, name, type, paths, chunking parameters, and metadata.
+IndexedSource: Represents an indexed source with its config, loaded documents, splits, and retriever.
+
+Functions:
+--default_source_configs(): Generates source configs from a list of PDF files (PDF_FILES), with dynamic chunk sizes based on filename (e.g., larger chunks for "attention"-related files).
+--load_text_file(path): Loads plain text or JSON files into strings.
+--load_source_documents(source, tracker): Loads documents for a source, extracting text from PDFs (page-by-page) or text files, and assigns metadata like doc ID, page number, and source info.
+--split_source_documents(source, documents): Splits documents into chunks using source-specific settings and adds chunk IDs.
+--build_advanced_retrieval_index(k=4): The core function that builds a global vector store and retriever, plus per-source retrievers. It loads, splits, and indexes documents, updating a tracker for change detection.
 """
 
 from __future__ import annotations
