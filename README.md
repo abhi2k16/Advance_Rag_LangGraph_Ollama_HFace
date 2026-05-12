@@ -21,6 +21,12 @@ The codebase is now organized into two packages:
 - [langchain_impl](./langchain_impl): indexing, routing, retrieval, generation
 - [langgraph_impl](./langgraph_impl): graph builder, graph nodes, memory CLI
 
+## Architecture Diagram
+
+The LangGraph RAG extension architecture is documented here:
+
+- [langgraph_rag_extension_architecture.svg](./langgraph_rag_extension_architecture.svg)
+
 ## Project Structure
 
 ```text
