@@ -327,7 +327,7 @@ def web_search_node(state: State) -> dict:
     print(f"\n[web_search_node]")
     print(f"  Web query : {web_query}")
 
-    tool = build_web_search_tool()
+    tool, source = build_web_search_tool()
     if tool is None:
         context = (
             "Web search unavailable. "
@@ -335,9 +335,16 @@ def web_search_node(state: State) -> dict:
         )
         print("  [WARNING] Tavily not configured — returning fallback message.")
         return {"retrieved_docs": [], "retrieval_context": context}
+    if source == "duckduckgo":
+        print("  [INFO] Using DuckDuckGoSearchRun for web search.")
+        results = tool.run(web_query)  # DuckDuckGoSearchRun returns a single string of results
+        context = format_web_results(results, source="duckduckgo")
+        print(f"  Results   : {len(results)} web hits (DuckDuckGo)")
+        return {"retrieved_docs": [], "retrieval_context": context}
+    else:
+        results = tool.invoke({"query": web_query})  # Tavily returns a list of dict results
 
-    results = tool.invoke({"query": web_query})
-    context = format_web_results(results)
+    context = format_web_results(results, source=source)
 
     print(f"  Results   : {len(results)} web hits")
 

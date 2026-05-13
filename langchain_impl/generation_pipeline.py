@@ -26,6 +26,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from langchain_community.tools import DuckDuckGoSearchRun
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -188,10 +189,14 @@ def reciprocal_rank_fusion(results: list[list], k: int = 60, verbose: bool = Fal
     return [doc_map[doc_key] for doc_key, _ in ranked_docs]
 
 
-def format_web_results(results) -> str:
-    if not results:
-        return ""
-
+def format_web_results(results, source: str = "tavily") -> str:
+    """The web search results formatting can vary significantly based on the source. 
+    This function normalizes the output into a consistent format for the LLM, 
+    regardless of whether it comes from Tavily or DuckDuckGo. It also handles cases 
+    where certain fields might be missing, ensuring robust formatting."""
+    if source == "duckduckgo":
+        return str(results)  # DDG returns a single string
+    # existing Tavily formatting logic below...
     lines = []
     for index, item in enumerate(results, start=1):
         if isinstance(item, dict):
@@ -205,13 +210,22 @@ def format_web_results(results) -> str:
         lines.append(f"[Web {index}] {title}\nURL: {url}\n{content}")
     return "\n\n".join(lines)
 
+# TODO: Add DuckDuckGo fallback for web search if Tavily isn't available, using langchain-community's 
+# DuckDuckGoSearchRun tool. This ensures web search functionality is available even without Tavily, 
+# albeit with potentially less robust results.
+def build_web_search_tool(prefer: str = "auto"):
+    """
+    prefer: "tavily" | "duckduckgo" | "auto" (Tavily first, DDG fallback)
+    """
+    if prefer in ("tavily", "auto"):
+        if TavilySearchResults is not None and os.environ.get("TAVILY_API_KEY"):
+            return TavilySearchResults(max_results=3), "tavily"
 
-def build_web_search_tool():
-    if TavilySearchResults is None:
-        return None
-    if not os.environ.get("TAVILY_API_KEY"):
-        return None
-    return TavilySearchResults(max_results=3)
+    if prefer in ("duckduckgo", "auto"):
+        if DuckDuckGoSearchRun is not None:
+            return DuckDuckGoSearchRun(), "duckduckgo"
+
+    return None, "none"
 
 
 def select_prompt() -> tuple[ChatPromptTemplate, str]:
