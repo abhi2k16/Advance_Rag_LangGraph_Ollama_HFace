@@ -320,9 +320,14 @@ def web_search_node(state: State) -> dict:
     web_rewriter = (
         ChatPromptTemplate.from_template(WEB_REWRITE_TEMPLATE) | llm | StrOutputParser()
     )
-    web_query = web_rewriter.invoke(
+    raw_web_query = web_rewriter.invoke(
         {"question": processed.retrieval_query, "current_year": datetime.now().year}
-    ).strip() or processed.retrieval_query
+    ).strip()
+    # Extract only the first non-empty line to avoid LLM explanations leaking into the query
+    web_query = next(
+        (line.strip() for line in raw_web_query.splitlines() if line.strip()),
+        processed.retrieval_query
+    )
 
     print(f"\n[web_search_node]")
     print(f"  Web query : {web_query}")

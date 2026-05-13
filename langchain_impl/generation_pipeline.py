@@ -100,19 +100,18 @@ Original question: {question}
 Search queries:"""
 
 WEB_REWRITE_TEMPLATE = """
-You are an expert search engine optimizer. Your task is to take a user's
-question and transform it into a high-performance web search query.
+You are a search query optimizer. Output ONLY the search query string, nothing else.
+No explanations, no numbering, no extra text — just the query.
 
 Rules:
-1. Strip out conversational filler (e.g., "please tell me", "I was wondering").
-2. Identify the core intent and add technical keywords or synonyms.
-3. If the query implies recent information, add the current year or "latest".
-4. Format the output as a single, concise search string.
+1. Strip conversational filler.
+2. Add technical keywords.
+3. Keep it under 10 words.
 
 Current year: {current_year}
 User Question: {question}
 
-Optimized Web Search Query:"""
+Query:"""
 
 
 def select_retrieval_mode() -> str:
