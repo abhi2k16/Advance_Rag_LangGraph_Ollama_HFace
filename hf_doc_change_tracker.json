@@ -54,5 +54,13 @@
     "num_chunks": 63,
     "previous_hash": "33c39c78b9aa5ce8ad78dfd41df81792",
     "previous_indexed": "2026-05-13T13:07:17.830158"
+  },
+  "P. Seshu - Textbook of Finite Element Analysis (2012, PHI Learning) - libgen.li.pdf": {
+    "doc_id": "b81e42d7-a456-4f45-bb33-143698507b49",
+    "hash": "cefe5d148a4aeac96c2921da4bdb8888",
+    "last_indexed": "2026-05-13T17:50:28.131706",
+    "num_chunks": 0,
+    "previous_hash": null,
+    "previous_indexed": null
   }
 }
