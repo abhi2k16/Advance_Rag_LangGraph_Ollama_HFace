@@ -26,7 +26,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from langchain_community.tools import DuckDuckGoSearchRun
+from langchain_community.tools import DuckDuckGoSearchResults, DuckDuckGoSearchRun
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -194,7 +194,15 @@ def format_web_results(results, source: str = "tavily") -> str:
     regardless of whether it comes from Tavily or DuckDuckGo. It also handles cases 
     where certain fields might be missing, ensuring robust formatting."""
     if source == "duckduckgo":
-        return str(results)  # DDG returns a single string
+        if isinstance(results, list):
+            lines = []
+            for i, item in enumerate(results, 1):
+                title = item.get("title", "Untitled")
+                url = item.get("link", item.get("url", "N/A"))
+                snippet = item.get("snippet", item.get("body", ""))
+                lines.append(f"[Web {i}] {title}\nURL: {url}\n{snippet}")
+            return "\n\n".join(lines)
+        return str(results)  # fallback for plain string
     # existing Tavily formatting logic below...
     lines = []
     for index, item in enumerate(results, start=1):
@@ -221,8 +229,8 @@ def build_web_search_tool(prefer: str = "auto"):
             return TavilySearchResults(max_results=3), "tavily"
 
     if prefer in ("duckduckgo", "auto"):
-        if DuckDuckGoSearchRun is not None:
-            return DuckDuckGoSearchRun(), "duckduckgo"
+        if DuckDuckGoSearchResults is not None:
+            return DuckDuckGoSearchResults(output_format="list", max_results=5), "duckduckgo"
 
     return None, "none"
 

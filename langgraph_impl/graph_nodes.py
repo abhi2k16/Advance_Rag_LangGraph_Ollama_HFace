@@ -341,10 +341,16 @@ def web_search_node(state: State) -> dict:
         print("  [WARNING] Tavily not configured — returning fallback message.")
         return {"retrieved_docs": [], "retrieval_context": context}
     if source == "duckduckgo":
-        print("  [INFO] Using DuckDuckGoSearchRun for web search.")
-        results = tool.run(web_query)  # DuckDuckGoSearchRun returns a single string of results
+        print("  [INFO] Using DuckDuckGoSearchResults for web search.")
+        results = tool.run(web_query)
+        # Print URLs hit by DuckDuckGo
+        if isinstance(results, list):
+            print(f"  Web sources ({len(results)}):")
+            for i, item in enumerate(results, 1):
+                title = item.get("title", "Untitled")
+                url = item.get("link", item.get("url", "N/A"))
+                print(f"    [{i}] {title}\n        {url}")
         context = format_web_results(results, source="duckduckgo")
-        print(f"  Results   : {len(results)} web hits (DuckDuckGo)")
         return {"retrieved_docs": [], "retrieval_context": context}
     else:
         results = tool.invoke({"query": web_query})  # Tavily returns a list of dict results
