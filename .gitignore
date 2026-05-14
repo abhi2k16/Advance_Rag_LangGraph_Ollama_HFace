@@ -13,7 +13,6 @@
 *.pptx
 *.ppt
 *.csv
-*.txt
 
 # ── RAG docs folder (entire folder ignored) ─────────────────────
 C:/Users/abhij/Desktop/GenAIwithLLMs/LangChain_projects/rag_docs/*

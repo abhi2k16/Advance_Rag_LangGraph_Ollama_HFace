@@ -1,0 +1,26 @@
+# Core LangChain
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+langchain-ollama
+
+# LangGraph (agentic + memory RAG)
+langgraph
+
+# Embeddings
+sentence-transformers
+
+# PDF extraction
+pdfplumber
+
+# Vector store (optional persistent backend)
+langchain-postgres
+psycopg[binary]
+
+# Web search (optional — requires TAVILY_API_KEY)
+# langchain-community already includes TavilySearchResults
+
+# Utilities
+python-dotenv
