@@ -3,3 +3,54 @@
 .venv/
 .uv-cache/
 .uv-python/
+
+# ── Document files (never commit raw source docs) ──────────────
+*.pdf
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pptx
+*.ppt
+*.csv
+*.txt
+
+# ── RAG docs folder (entire folder ignored) ─────────────────────
+rag_docs/
+
+# ── Vector DB & index artifacts ─────────────────────────────────
+chroma_db/
+*.db
+*.sqlite
+*.sqlite3
+hf_doc_change_tracker.json
+hf_record_manager.db
+
+# ── Model weights & embeddings (heavy files) ─────────────────────
+*.bin
+*.pt
+*.pth
+*.onnx
+*.safetensors
+models/
+embeddings/
+
+# ── Python artifacts ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# ── Environment & secrets ────────────────────────────────────────
+.env
+.env.*
+*.key
+*.pem
+
+# ── OS noise ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
