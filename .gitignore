@@ -1,4 +1,5 @@
 .pdf
+.docx
 .venv/
 .uv-cache/
 .uv-python/
