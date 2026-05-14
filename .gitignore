@@ -16,7 +16,8 @@
 *.txt
 
 # ── RAG docs folder (entire folder ignored) ─────────────────────
-rag_docs/
+C:/Users/abhij/Desktop/GenAIwithLLMs/LangChain_projects/rag_docs/*
+!C:/Users/abhij/Desktop/GenAIwithLLMs/LangChain_projects/rag_docs/.gitkeep
 
 # ── Vector DB & index artifacts ─────────────────────────────────
 chroma_db/
