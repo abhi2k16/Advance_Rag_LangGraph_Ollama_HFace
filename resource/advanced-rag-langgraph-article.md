@@ -1,4 +1,4 @@
-# How I Built a Local, Memory-Aware RAG System with LangGraph, Ollama, and HuggingFace — From Scratch
+# How to Built a Local, Memory-Aware RAG System with LangGraph, Ollama, and HuggingFace — From Scratch
 
 *A deep-dive into building an agentic retrieval-augmented generation pipeline that actually remembers what you said five questions ago.*
 
